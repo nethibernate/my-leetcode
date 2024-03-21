@@ -39,15 +39,32 @@ class Solution {
 				break
 			}
 			if (!handle) {
-				if (left == height.size - 3) {
-					if (height[left] > height[left + 1] && height[left + 1] < height[left + 2]) {
-						val l = if (height[left] > height[left + 2]) height[left + 2] else height[left]
-						sum += (l - height[left + 1])
+				var i = height.lastIndex
+				while (i > left) {
+					if (height[i] <= height[i - 1]) {
+						i--
+						continue
 					}
-					break
-				} else {
-					left++
+					
+					var innerHandle = false
+					var j = i - 1
+					while (j >= left) {
+						if (height[j] < height[i]) {
+							j--
+							continue
+						}
+						var area = height[i] * (i - j - 1)
+						for (m in (i - 1) downTo (j + 1)) {
+							area -= height[m]
+						}
+						sum += area
+						i = j
+						innerHandle = true
+						break
+					}
+					if (!innerHandle) break
 				}
+				break
 			}
 		}
 		return sum
